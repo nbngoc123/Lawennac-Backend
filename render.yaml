@@ -11,4 +11,4 @@ services:
         value: production
       - key: DATABASE_URL
         fromDatabase:
-          name: ai-image-generation-db # Tên database trên Render
+          name: ai-image-generation-db
