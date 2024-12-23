@@ -1,3 +1,4 @@
 import { Runware } from "@runware/sdk-js";
-export const runware = new Runware({ apiKey: "2GhOrftvZs5pnfbFUWWAflPBpS3msW2n" });
+const api_key = mysql.createConnection(process.env.RUNWARE_API_KEY);
+export const runware = new Runware({ apiKey: api_key });
 

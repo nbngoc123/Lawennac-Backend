@@ -1,12 +1,12 @@
 import mysql from 'mysql2';
 
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'thanhno1303',
-  database: 'ai_image_generation',
-});
-
+// const db = mysql.createConnection({
+//   host: 'localhost',
+//   user: 'root',
+//   password: 'thanhno1303',
+//   database: 'ai_image_generation',
+// });
+const db = mysql.createConnection(process.env.DATABASE_URL);
 db.connect((err) => {
   if (err) {
     console.error('Error connecting to the database:', err);
