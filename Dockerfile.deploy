@@ -1,0 +1,15 @@
+FROM ubuntu:latest
+
+RUN apt-get update && \
+    apt-get install -y curl
+
+# Cài đặt docker-compose
+RUN curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+RUN chmod +x /usr/local/bin/docker-compose
+
+# Sao chép docker-compose.yaml và ứng dụng của bạn
+WORKDIR /app
+COPY . /app
+
+# Đặt lệnh mặc định
+CMD ["docker-compose", "up", "-d"]
