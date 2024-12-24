@@ -1,0 +1,65 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: db
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: Tl93rpskn
+      MYSQL_DATABASE: "ai_image_generation"
+      MYSQL_USER: "nbngoc"
+      MYSQL_PASSWORD: Tl93rpskn
+    ports:
+      - "3306:3306"
+    expose:
+      - 3306
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "db", "-u", "nbngoc", "-pTl93rpskn"] # Sửa -h thành "db"
+      timeout: 20s
+      retries: 10
+      interval: 5s # Thêm interval để kiểm tra định kỳ
+      start_period: 10s # Thêm start_period để cho MySQL có thời gian khởi động
+    # healthcheck:
+    #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "nbngoc", "-p", "Tl93rpskn"]
+    #   timeout: 20s
+    #   retries: 10
+    networks:
+      - internalnet
+  app:
+    container_name: nodejs_app
+    build: .
+    image: nodeapp:v1
+    ports:
+      - "3006:5000"
+    expose:
+      - 3000
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: "nbngoc"
+      DB_PASSWORD: "Tl93rpskn"
+      DB_NAME: "ai_image_generation"
+      DB_CONNECTION_LIMIT: 20
+    depends_on:
+      # - db
+    # links:
+    #   - db # Thêm links
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/usr/src/app # Mount để phát triển
+      - /usr/src/app/node_modules # Ngăn node_modules máy local ghi đè
+    networks:
+      - internalnet
+
+networks:
+  internalnet:
+    driver: bridge
+
+volumes:
+  mysql_data:

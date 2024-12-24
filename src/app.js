@@ -3,6 +3,9 @@ import bodyParser from 'body-parser';
 const app = express();
 // import { generateImage } from './services/RequestImage.js';
 import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config()
+const PORT = process.env.SERVER_PORT || 3000;
 
 app.use(cors({
   origin: 'http://localhost:3000', // Chỉ cho phép origin này
@@ -36,7 +39,6 @@ async function main() {
 }
 }
 // main();
-const port = 3006;
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Example app listening on PORT ${PORT}`);
 });

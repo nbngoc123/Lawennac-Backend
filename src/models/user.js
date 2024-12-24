@@ -1,5 +1,5 @@
 import db from '../config/database.js';
-import bcrypt from 'bcrypt';
+// import bcrypt from 'bcrypt';
 
 // Lấy tất cả người dùng
 export const getAllUsers = (callback) => {
@@ -8,19 +8,9 @@ export const getAllUsers = (callback) => {
 };
 
 // Thêm người dùng mới (bao gồm mã hóa mật khẩu)
-export const addUser = async (userData, callback) => {
-    try {
-        // Mã hóa mật khẩu
-        // console.log(userData)
-        const salt = await bcrypt.genSalt(10); // Tạo salt với độ dài 10
-        const hashedPassword = await bcrypt.hash(userData.password, salt); // Mã hóa mật khẩu
-
-        const query = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
-        db.query(query, [userData.username, userData.email, hashedPassword], callback);
-    } catch (error) {
-        console.error('Error hashing password:', error);
-        callback(error, null);
-    }
+export const addUser = (userData, callback) => {
+    const query = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
+    db.query(query, [userData.username, userData.email, userData.password], callback);
 };
 
 // Lấy người dùng theo ID
